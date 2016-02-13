@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'starter.directives'])
+angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter.services', 'starter.directives'])
 
-    .run(function ($ionicPlatform) {
+    .run(function ($ionicPlatform, Database, LocationStorage) {
         $ionicPlatform.ready(function () {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
@@ -19,6 +19,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
+            Database.init();
+            LocationStorage.start();
         });
     })
 
@@ -48,13 +50,27 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                     }
                 }
             })
+            .state('tab.new-destination', {
+                url: '/new/destinations',
+                views: {
+                    'tab-destinations': {
+                        templateUrl: 'templates/destination-new.html',
+                        controller: 'NewDestinationCtrl'
+                    }
+                }
+            })
 
             .state('tab.destination-map', {
-                url: '/destinations/:destinationId',
+                url: '/destinations/:id',
                 views: {
                     'tab-destinations': {
                         templateUrl: 'templates/destination-map.html',
                         controller: 'DestinationMapCtrl'
+                    }
+                },
+                resolve: {
+                    destination: function ($stateParams, Destinations) {
+                        return Destinations.getDestination($stateParams.id)
                     }
                 }
             });

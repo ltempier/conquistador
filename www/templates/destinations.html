@@ -1,14 +1,18 @@
-<ion-view view-title="Destinations">
-    <ion-content class="padding">
+<ion-view view-title="My destinations">
 
 
+    <ion-nav-buttons side="secondary">
+        <button class="button button-clear" ng-click="newDestination()">
+            <i class="icon ion-ios-plus"></i>
+        </button>
+    </ion-nav-buttons>
+
+    <ion-content>
         <ion-list>
             <ion-item class="item-icon-right" ng-repeat="destination in destinations"
                       href="#/tab/destinations/{{destination.id}}">
-
                 <h2>{{destination.name}}</h2>
                 <i class="icon ion-chevron-right icon-accessory"></i>
-
             </ion-item>
         </ion-list>
 

@@ -1,6 +1,6 @@
 angular.module('starter.directives', [])
 
-    .directive('map', function () {
+    .directive('map', function (MapStorage) {
 
         return {
             restrict: 'E',
@@ -9,10 +9,14 @@ angular.module('starter.directives', [])
             },
             link: function ($scope, $element) {
                 function initialize() {
+
+                    //var url = '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                    var url = '//api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}';
                     var mapOptions = {
-                        layers: new L.TileLayer('//api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}', {
+                        layers: new L.TileLayer(url, {
                             apikey: 'pk.eyJ1IjoibHRlbXBpZXIiLCJhIjoiVjVCTkw2NCJ9.u23u7IQLUuo2Z0KUuAfz4g',
-                            mapid: 'ltempier.ni82p485'
+                            mapid: 'ltempier.ni82p485',
+                            storage: MapStorage
                         }),
                         attributionControl: false
                     };
