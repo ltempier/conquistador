@@ -179,8 +179,6 @@ angular.module('starter.services', [])
                 else
                     db = window.openDatabase("my.db", '1', 'my', 1024 * 1024 * 100);
 
-                this.clear(); //TODO remove
-
                 _.each(tables, function (table, tableName) {
                     var columns = _.map(table, function (column, columnName) {
                         return columnName + " " + column

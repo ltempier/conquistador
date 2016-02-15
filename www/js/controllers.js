@@ -40,25 +40,27 @@ angular.module('starter.controllers', [])
             $scope.mapCreated = function (map) {
                 map.setView([destination.latitude, destination.longitude], 12);
 
-                L.geoJson(destination.geojson, {
+
+                var svg = d3.select(map.getPanes().overlayPane).append("svg"),
+                    g = svg.append("g").attr("class", "leaflet-zoom-hide");
+
+                var outGeoJson = destination.geojson;
+                outGeoJson.geometry.coordinates.unshift([[-90, -180], [-90, 180], [90, 180], [90, -180]]);
+                L.geoJson(outGeoJson, {
                     style: {
-                        fillOpacity: 0
+                        fillColor: 'white',
+                        fillOpacity: 0.7
                     }
                 }).addTo(map);
-                //[[-90, -180], [-90, 180], [90, 180], [90, -180]],
-                //L.polygon([[[-90, -180], [-90, 180], [90, 180], [90, -180]],
-                //    [destination.geojson.geometry.coordinates[0]]]).addTo(map);
 
-
+                var heat;
                 LocationStorage.getLocations(destination.id).then(function (locations) {
-                    _.each(locations, function (location) {
-                        //L.marker(location.latlng).addTo(map)
-                        //heat.addLatLng(location.latlng);
-                    })
+                    heat = L.heatLayer(_.map(locations, function (location) {
+                        return [location.latitude, location.longitude]
+                    })).addTo(map)
                 });
                 $rootScope.$on('newLocation', function (e, location) {
-                    //L.marker(location.latlng).addTo(map)
-                    //heat.addLatLng(location.latlng);
+                    heat.addLatLng([location.latitude, location.longitude]);
                 })
             };
         }]);
